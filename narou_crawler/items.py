@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+
+# Define here the models for your scraped items
+#
+# See documentation in:
+# https://doc.scrapy.org/en/latest/topics/items.html
+
+import scrapy
+
+class Novel(scrapy.Item):
+    n_code = scrapy.Field()
+    title = scrapy.Field()
+    story = scrapy.Field()
+    big_genre = scrapy.Field()
+    genre = scrapy.Field()
+    keyword = scrapy.Field()
+    novel_type = scrapy.Field()
+    end = scrapy.Field()
+    general_all_no = scrapy.Field()
+    length = scrapy.Field()
+    global_point = scrapy.Field()
+    fav_novel_count = scrapy.Field()
+    review_count = scrapy.Field()
+    all_point = scrapy.Field()
+    all_hyoka_count = scrapy.Field()
+    talk_rate = scrapy.Field()
+    user_id = scrapy.Field()
+    writer_name = scrapy.Field()
