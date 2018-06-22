@@ -25,4 +25,5 @@ class Novel(scrapy.Item):
     all_hyoka_count = scrapy.Field()
     talk_rate = scrapy.Field()
     user_id = scrapy.Field()
-    writer_name = scrapy.Field()
+    writer = scrapy.Field()
+    contents = scrapy.Field()
