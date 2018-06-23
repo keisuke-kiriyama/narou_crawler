@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import scrapy
 from scrapy_splash import SplashRequest
 import json
@@ -7,8 +6,8 @@ import gzip
 
 from narou_crawler.items import NovelInfo
 
-class NarouSpider(scrapy.Spider):
-    name = 'narou_spider'
+class NarouMetaSpider(scrapy.Spider):
+    name = 'narou_meta_spider'
     allowed_domains = ['yomou.syosetu.com',
                        'mypage.syosetu.com',
                        'ncode.syosetu.com']
@@ -19,7 +18,6 @@ class NarouSpider(scrapy.Spider):
             yield SplashRequest(url, self.parse_mypage, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="navi_all"]/a[@title="次のページ"]/@href').extract_first()
         yield SplashRequest(response.urljoin(next_page_url), self.parse, args={'wait': 1.0})
-
 
     def parse_mypage(self, response):
         novel_list_url = response.xpath('//div[@class="a_line"]/a[contains(text(), "作品一覧")]/@href').extract_first()
@@ -58,7 +56,7 @@ class NarouSpider(scrapy.Spider):
 
     def fetch_novel_meta_info(self, n_code):
         url = 'http://api.syosetu.com/novelapi/api/?out=json&gzip=5&of=t-n-u-w-s-bg-g-k-nt-e-ga-l-gp-f-r-a-ah-ka-&lim=1&ncode={}'.format(n_code)
-        error_log_file_path = './fetch_error_log.txt'
+        error_log_file_path = './data/fetch_error_log.txt'
         f = open(error_log_file_path, 'a')
         novel_meta = None
         try:
@@ -79,6 +77,6 @@ class NarouSpider(scrapy.Spider):
         return novel_meta
 
 if __name__ == '__main__':
-    spider = NarouSpider()
+    spider = NarouMetaSpider()
     novel_meta = spider.fetch_novel_meta_info('N2415EG')
 

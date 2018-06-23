@@ -8,7 +8,7 @@ scrapy shell "http://0.0.0.0:8050/render.html?url=(確認したいページのUR
 ```
 - spiderの実行
 ```
-scrapy crawl beams_spider -o temp.jl
+scrapy crawl beams_spider -o /data/novel_info.jl
 ```
 
 ## 参考リンク

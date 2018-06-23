@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Define here the models for your scraped items
 #
 # See documentation in:
@@ -26,3 +24,7 @@ class NovelInfo(scrapy.Item):
     talk_rate = scrapy.Field()
     user_id = scrapy.Field()
     writer = scrapy.Field()
+
+class NovelContents(scrapy.Item):
+    n_code = scrapy.Field()
+    contents = scrapy.Field()

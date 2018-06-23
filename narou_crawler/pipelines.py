@@ -9,7 +9,7 @@ from scrapy.exceptions import DropItem
 
 class NovelInfoValidationPipeline(object):
     def process_item(self, item, spider):
-        if not spider.name == 'narou_spider':
+        if not spider.name == 'narou_meta_spider':
             return item
 
         if not item['n_code']:
