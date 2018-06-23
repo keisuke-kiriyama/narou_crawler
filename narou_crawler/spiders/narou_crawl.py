@@ -2,10 +2,10 @@
 import scrapy
 from scrapy_splash import SplashRequest
 import json
-from urllib.request import urlopen
+from urllib.request import urlopen, HTTPError, URLError
 import gzip
 
-from narou_crawler.items import Novel
+from narou_crawler.items import NovelInfo
 
 class NarouSpider(scrapy.Spider):
     name = 'narou_spider'
@@ -29,15 +29,15 @@ class NarouSpider(scrapy.Spider):
         for novel_info in response.xpath('//p[@class="info"]/a[contains(text(), "小説情報")]/@href').extract():
             yield SplashRequest(response.urljoin(novel_info), self.parse_novel_info, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="pager_idou"]/a[@title="next page"]/@href').extract_first()
-        yield SplashRequest(response.urljoin(next_page_url), self.parse_novel_list(), args={'wait': 1.0})
+        yield SplashRequest(response.urljoin(next_page_url), self.parse_novel_list, args={'wait': 1.0})
 
     def parse_novel_info(self, response):
-        novel = Novel()
+        novel = NovelInfo()
         n_code = response.xpath('//p[@id="ncode"]/text()').extract_first()
         novel_meta = self.fetch_novel_meta_info(n_code)
-        if not novel_meta['ncode'] == n_code: return
-        novel['title'] = novel_meta['title']
+        if not novel_meta or not novel_meta['ncode'] == n_code: return
         novel['n_code'] = n_code
+        novel['title'] = novel_meta['title']
         novel['story'] = novel_meta['story']
         novel['big_genre'] = novel_meta['biggenre']
         novel['genre'] = novel_meta['genre']
@@ -50,27 +50,35 @@ class NarouSpider(scrapy.Spider):
         novel['fav_novel_count'] = novel_meta['fav_novel_cnt']
         novel['review_count'] = novel_meta['review_cnt']
         novel['all_point'] = novel_meta['all_point']
-        novel['all_hyoka_count'] = novel_meta['all_hyoka_cnt']
+        novel['all_eval_count'] = novel_meta['all_hyoka_cnt']
         novel['talk_rate'] = novel_meta['kaiwaritu']
         novel['user_id'] = novel_meta['userid']
         novel['writer'] = novel_meta['writer']
-        # novel['n_code'] = response.xpath('//p[@id="ncode"]/text()').extract_first()
-        # novel['title'] = response.xpath('//div[@id="contents_main"]/h1/a/text()').extract_first()
-        # novel['story'] = response.xpath('//td[@class="ex"]/text()').extract()
-        # novel['genre'] = response.xpath('//th[contains(text(), "ジャンル")]/following-sibling::td/text()').extract()
-        # novel['keyword'] = response.xpath('//th[contains(text(), "キーワード")]/following-sibling::td/span/text()').extract() + \
-        #                    response.xpath('//th[contains(text(), "キーワード")]/following-sibling::td/text()').extract()
+        yield novel
 
     def fetch_novel_meta_info(self, n_code):
         url = 'http://api.syosetu.com/novelapi/api/?out=json&gzip=5&of=t-n-u-w-s-bg-g-k-nt-e-ga-l-gp-f-r-a-ah-ka-&lim=1&ncode={}'.format(n_code)
-        response = urlopen(url)
-        with gzip.open(response, 'rt', encoding='utf-8') as f:
-            j_raw = f.read()
-            j_obj = json.loads(j_raw)
-        return j_obj[1]
+        error_log_file_path = './fetch_error_log.txt'
+        f = open(error_log_file_path, 'a')
+        novel_meta = None
+        try:
+            response = urlopen(url)
+            with gzip.open(response, 'rt', encoding='utf-8') as f:
+                j_raw = f.read()
+                j_obj = json.loads(j_raw)
+                novel_meta = j_obj[1]
+        except HTTPError as err:
+            f.write("Ncode: {}, HTTPError: {}".format(n_code, err))
+            f.close()
+        except URLError as err:
+            f.write("Ncode: {}, URLError: {}".format(n_code, err))
+            f.close()
+        except:
+            f.write("Ncode: {}, Erorr".format(n_code))
+            f.close()
+        return novel_meta
 
 if __name__ == '__main__':
     spider = NarouSpider()
     novel_meta = spider.fetch_novel_meta_info('N2415EG')
-    print(novel_meta)
 

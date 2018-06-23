@@ -69,7 +69,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'narou_crawler.pipelines.NarouCrawlerPipeline': 300,
+   'narou_crawler.pipelines.NovelInfoValidationPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

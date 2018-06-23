@@ -7,7 +7,7 @@
 
 import scrapy
 
-class Novel(scrapy.Item):
+class NovelInfo(scrapy.Item):
     n_code = scrapy.Field()
     title = scrapy.Field()
     story = scrapy.Field()
@@ -22,8 +22,7 @@ class Novel(scrapy.Item):
     fav_novel_count = scrapy.Field()
     review_count = scrapy.Field()
     all_point = scrapy.Field()
-    all_hyoka_count = scrapy.Field()
+    all_eval_count = scrapy.Field()
     talk_rate = scrapy.Field()
     user_id = scrapy.Field()
     writer = scrapy.Field()
-    contents = scrapy.Field()
