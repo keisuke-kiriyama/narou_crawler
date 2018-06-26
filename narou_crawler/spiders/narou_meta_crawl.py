@@ -1,5 +1,4 @@
 import scrapy
-from scrapy_splash import SplashRequest
 import json
 from urllib.request import urlopen, HTTPError, URLError
 import gzip
@@ -16,23 +15,18 @@ class NarouMetaSpider(scrapy.Spider):
     def parse(self, response):
         for url in response.xpath('//span[@class="username"]/a/@href').extract():
             yield scrapy.Request(url, callback=self.parse_mypage)
-            # yield SplashRequest(url, self.parse_mypage, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="navi_all"]/a[@title="次のページ"]/@href').extract_first()
         yield scrapy.Request(response.urljoin(next_page_url), callback=self.parse)
-        # yield SplashRequest(response.urljoin(next_page_url), self.parse, args={'wait': 1.0})
 
     def parse_mypage(self, response):
         novel_list_url = response.xpath('//div[@class="a_line"]/a[contains(text(), "作品一覧")]/@href').extract_first()
         yield scrapy.Request(response.urljoin(novel_list_url), callback=self.parse_novel_list)
-        # yield SplashRequest(response.urljoin(novel_list_url), self.parse_novel_list, args={'wait': 1.0})
 
     def parse_novel_list(self, response):
         for novel_info in response.xpath('//p[@class="info"]/a[contains(text(), "小説情報")]/@href').extract():
             yield scrapy.Request(response.urljoin(novel_info), callback=self.parse_novel_info)
-            # yield SplashRequest(response.urljoin(novel_info), self.parse_novel_info, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="pager_idou"]/a[@title="next page"]/@href').extract_first()
         yield scrapy.Request(response.urljoin(next_page_url), callback=self.parse_novel_list)
-        # yield SplashRequest(response.urljoin(next_page_url), self.parse_novel_list, args={'wait': 1.0})
 
     def parse_novel_info(self, response):
         novel = NovelInfo()
