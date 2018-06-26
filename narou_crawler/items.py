@@ -30,4 +30,5 @@ class NovelInfo(scrapy.Item):
 
 class NovelContents(scrapy.Item):
     n_code = scrapy.Field()
+    sub_titles = scrapy.Field()
     contents = scrapy.Field()

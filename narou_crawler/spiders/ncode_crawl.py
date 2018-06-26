@@ -10,7 +10,6 @@ class NCodeSpider(scrapy.Spider):
                        'ncode.syosetu.com']
     start_urls = ['https://yomou.syosetu.com/userlist/avgranklist/?p=1']
 
-
     def parse(self, response):
         for url in response.xpath('//span[@class="username"]/a/@href').extract():
             yield scrapy.Request(url, callback=self.parse_mypage)
@@ -28,3 +27,4 @@ class NCodeSpider(scrapy.Spider):
             yield ncode_item
         next_page_url = response.xpath('//div[@class="pager_idou"]/a[@title="next page"]/@href').extract_first()
         yield scrapy.Request(response.urljoin(next_page_url), callback=self.parse_novel_list)
+
