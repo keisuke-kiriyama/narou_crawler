@@ -18,9 +18,7 @@ class NarouContentsSpider(scrapy.Spider):
             for line in f.readlines():
                 n_code = line.split(',')[1].replace('"', '').strip()
                 start_urls.append('https://ncode.syosetu.com/' + n_code + '/')
-        # self.start_urls = start_urls
-        # self.start_urls = ['https://ncode.syosetu.com/n1435ev/']
-        self.start_urls = ['https://ncode.syosetu.com/n6356eu/']
+        self.start_urls = start_urls
 
     @classmethod
     def from_crawler(cls, crawler):

@@ -43,3 +43,13 @@ class NovelInfoValidationPipeline(object):
 
         return item
 
+class NovelContentsValidationPipeline(object):
+    def process_item(self, item, spider):
+        if not spider.name == 'narou_contents_spider':
+            return item
+
+        if not item['n_code']:
+            raise DropItem('Missing n_code')
+
+        return item
+

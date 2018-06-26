@@ -73,7 +73,8 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'narou_crawler.pipelines.NCodeItemValidationPipeline': 299,
-   'narou_crawler.pipelines.NovelInfoValidationPipeline': 300,
+   'narou_crawler.pipelines.NovelContentsValidationPipeline': 300,
+   'narou_crawler.pipelines.NovelInfoValidationPipeline': 301,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
