@@ -15,19 +15,24 @@ class NarouMetaSpider(scrapy.Spider):
 
     def parse(self, response):
         for url in response.xpath('//span[@class="username"]/a/@href').extract():
-            yield SplashRequest(url, self.parse_mypage, args={'wait': 1.0})
+            yield scrapy.Request(url, callback=self.parse_mypage)
+            # yield SplashRequest(url, self.parse_mypage, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="navi_all"]/a[@title="次のページ"]/@href').extract_first()
-        yield SplashRequest(response.urljoin(next_page_url), self.parse, args={'wait': 1.0})
+        yield scrapy.Request(response.urljoin(next_page_url), callback=self.parse)
+        # yield SplashRequest(response.urljoin(next_page_url), self.parse, args={'wait': 1.0})
 
     def parse_mypage(self, response):
         novel_list_url = response.xpath('//div[@class="a_line"]/a[contains(text(), "作品一覧")]/@href').extract_first()
-        yield SplashRequest(response.urljoin(novel_list_url), self.parse_novel_list, args={'wait': 1.0})
+        yield scrapy.Request(response.urljoin(novel_list_url), callback=self.parse_novel_list)
+        # yield SplashRequest(response.urljoin(novel_list_url), self.parse_novel_list, args={'wait': 1.0})
 
     def parse_novel_list(self, response):
         for novel_info in response.xpath('//p[@class="info"]/a[contains(text(), "小説情報")]/@href').extract():
-            yield SplashRequest(response.urljoin(novel_info), self.parse_novel_info, args={'wait': 1.0})
+            yield scrapy.Request(response.urljoin(novel_info), callback=self.parse_novel_info)
+            # yield SplashRequest(response.urljoin(novel_info), self.parse_novel_info, args={'wait': 1.0})
         next_page_url = response.xpath('//div[@class="pager_idou"]/a[@title="next page"]/@href').extract_first()
-        yield SplashRequest(response.urljoin(next_page_url), self.parse_novel_list, args={'wait': 1.0})
+        yield scrapy.Request(response.urljoin(next_page_url), callback=self.parse_novel_list)
+        # yield SplashRequest(response.urljoin(next_page_url), self.parse_novel_list, args={'wait': 1.0})
 
     def parse_novel_info(self, response):
         novel = NovelInfo()
@@ -55,7 +60,7 @@ class NarouMetaSpider(scrapy.Spider):
         yield novel
 
     def fetch_novel_meta_info(self, n_code):
-        url = 'http://api.syosetu.com/novelapi/api/?out=json&gzip=5&of=t-n-u-w-s-bg-g-k-nt-e-ga-l-gp-f-r-a-ah-ka-&lim=1&ncode={}'.format(n_code)
+        url = 'https://api.syosetu.com/novelapi/api/?out=json&gzip=5&of=t-n-u-w-s-bg-g-k-nt-e-ga-l-gp-f-r-a-ah-ka-&lim=1&ncode={}'.format(n_code)
         error_log_file_path = './data/fetch_error_log.txt'
         f = open(error_log_file_path, 'a')
         novel_meta = None
