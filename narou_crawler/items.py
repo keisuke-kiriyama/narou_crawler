@@ -5,6 +5,9 @@
 
 import scrapy
 
+class NCodeItem(scrapy.Item):
+    n_code = scrapy.Field()
+
 class NovelInfo(scrapy.Item):
     n_code = scrapy.Field()
     title = scrapy.Field()

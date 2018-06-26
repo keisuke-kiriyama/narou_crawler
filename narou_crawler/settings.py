@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 4
+DOWNLOAD_DELAY = 5
 RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 2
@@ -70,6 +70,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 2
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
+   'narou_crawler.pipelines.NCodeItemValidationPipeline': 299,
    'narou_crawler.pipelines.NovelInfoValidationPipeline': 300,
 }
 

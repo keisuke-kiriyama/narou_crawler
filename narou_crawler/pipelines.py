@@ -7,6 +7,20 @@
 
 from scrapy.exceptions import DropItem
 
+class NCodeItemValidationPipeline(object):
+    def process_item(self, item, spider):
+        if not spider.name == 'narou_ncode_spider':
+            return item
+
+        if not item['n_code']:
+            raise DropItem('Missing n_code')
+
+        if not item['n_code'][0] == 'n':
+            raise DropItem('not start n')
+
+        return item
+
+
 class NovelInfoValidationPipeline(object):
     def process_item(self, item, spider):
         if not spider.name == 'narou_meta_spider':
