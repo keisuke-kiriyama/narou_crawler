@@ -6,6 +6,8 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from scrapy.exceptions import DropItem
+import os
+import json
 
 class NCodeItemValidationPipeline(object):
     def process_item(self, item, spider):
@@ -50,6 +52,13 @@ class NovelContentsValidationPipeline(object):
 
         if not item['n_code']:
             raise DropItem('Missing n_code')
+
+        PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+        DATA_DIR_PATH = os.path.join(PROJECT_ROOT, 'data')
+        OUTPUT_DIR_PATH = os.path.join(DATA_DIR_PATH, 'contents')
+        output_file_path = os.path.join(OUTPUT_DIR_PATH, item['n_code'] + '.json')
+        with open(output_file_path, 'w') as f:
+            json.dump(dict(item), f)
 
         return item
 
