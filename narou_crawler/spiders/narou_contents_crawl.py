@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import json
 from scrapy_splash import SplashRequest
 
 from narou_crawler.items import NovelContents
@@ -16,7 +17,7 @@ class NarouContentsSpider(scrapy.Spider):
         start_urls = []
         with open(settings.get('START_URLS_FILE_PATH')) as f:
             for line in f.readlines():
-                n_code = line.split(',')[1].replace('"', '').strip()
+                n_code = line.split('"')[3]
                 start_urls.append('https://ncode.syosetu.com/' + n_code + '/')
         self.start_urls = start_urls
 

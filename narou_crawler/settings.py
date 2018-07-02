@@ -29,10 +29,10 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 5
+DOWNLOAD_DELAY = 3
 RANDOMIZE_DOWNLOAD_DELAY = True
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_DOMAIN = 2
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
@@ -106,4 +106,5 @@ HTTPCACHE_DIR = 'httpcache'
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR_PATH = os.path.join(PROJECT_ROOT, 'data')
-START_URLS_FILE_PATH = os.path.join(DATA_DIR_PATH, 'items_narou_ncode_spider_10.csv')
+START_URLS_FILE_PATH = os.path.join(DATA_DIR_PATH, 'ncode.jl')
+
